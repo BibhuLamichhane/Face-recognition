@@ -4,7 +4,6 @@ import subprocess
 import capture
 import cv2 as cv
 import face_recognition
-import numpy as np
 
 CAM = cv.VideoCapture(0)
 cv.namedWindow = 'test'
@@ -62,10 +61,11 @@ while True:
             matches = face_recognition.compare_faces(encodings, face_encoding)
             name = 'N/A'
             face_distances = face_recognition.face_distance(encodings, face_encoding)
-            print(matches)
-            if matches[np.argmax(face_distances)]:
-                name = names[np.argmax(face_distances)]
-
+            for match in range(len(matches)):
+                if matches[match]:
+                    name = names[match]
+                else:
+                    name = '...'
         now = False
     else:
         now = True
