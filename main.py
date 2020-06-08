@@ -8,7 +8,14 @@ import numpy as np
 
 CAM = cv.VideoCapture(0)
 cv.namedWindow = 'test'
+
 face_loc = []
+images = []
+
+commands = sys.argv[1:]
+
+for r, directory, file in os.walk('./images'):
+    images = file
 
 
 def store_new_image():
@@ -25,20 +32,17 @@ def store_new_image():
 
 
 original_commands = {'str_n_img': store_new_image, 'sni': store_new_image}
-commands = sys.argv[1:]
 
 for command in commands:
     if original_commands.get(command) is not None:
         original_commands[command]()
 
-images = []
-for r, directory, file in os.walk('./images'):
-    images = file
-
 encodings = [face_recognition.face_encodings(face_recognition.load_image_file(f"images/{encoding}"))[0]
              for encoding in images]
 
 names = [name.rstrip('.png') for name in images]
+
+
 now = True
 
 while True:
