@@ -7,7 +7,7 @@ import face_recognition
 
 CAM = cv.VideoCapture(0)
 cv.namedWindow = 'test'
-
+matches = []
 face_loc = []
 images = []
 
@@ -15,6 +15,8 @@ commands = sys.argv[1:]
 
 for r, directory, file in os.walk('./images'):
     images = file
+
+print(images)
 
 
 def store_new_image():
@@ -35,6 +37,8 @@ original_commands = {'str_n_img': store_new_image, 'sni': store_new_image}
 for command in commands:
     if original_commands.get(command) is not None:
         original_commands[command]()
+
+print(face_recognition.face_encodings(face_recognition.load_image_file(f"images/Binod.png")))
 
 encodings = [face_recognition.face_encodings(face_recognition.load_image_file(f"images/{encoding}"))[0]
              for encoding in images]
@@ -61,20 +65,22 @@ while True:
             matches = face_recognition.compare_faces(encodings, face_encoding)
             name = 'N/A'
             face_distances = face_recognition.face_distance(encodings, face_encoding)
-            for match in range(len(matches)):
-                if matches[match]:
-                    name = names[match]
-                else:
-                    name = '...'
+
+            print(matches)
         now = False
     else:
         now = True
-    for location, name in zip(face_loc, names):
+    for location, match in zip(face_loc, matches):
         top, right, bottom, left = location
         top *= 4
         right *= 4
         bottom *= 4
         left *= 4
+        name = 'N/A'
+
+        if match is not None and match:
+            name = names[matches.index(match)]
+
         f = cv.rectangle(f, (left, top), (right, bottom), (255, 0, 0), 3)
 
         cv.rectangle(f, (left, bottom - 15), (right, bottom), (255, 0, 0), cv.FILLED)
