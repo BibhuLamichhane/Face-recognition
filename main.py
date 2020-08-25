@@ -38,8 +38,6 @@ for command in commands:
     if original_commands.get(command) is not None:
         original_commands[command]()
 
-print(face_recognition.face_encodings(face_recognition.load_image_file(f"images/Binod.png")))
-
 encodings = [face_recognition.face_encodings(face_recognition.load_image_file(f"images/{encoding}"))[0]
              for encoding in images]
 
